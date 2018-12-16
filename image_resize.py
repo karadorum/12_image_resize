@@ -3,18 +3,18 @@ import os
 from PIL import Image
 
 
-
 def check_positive_int(argument):
-    value = int(argument)
-    if value <= 0:
-         raise argparse.ArgumentTypeError("{} is invalid. Must be positive number".format(argument))
-    return value
+    arg = int(argument)
+    if arg <= 0:
+        raise argparse.ArgumentTypeError("{} is invalid. Must be positive number".format(argument))
+    return arg
+
 
 def check_positive_float(argument):
-    value = float(argument)
-    if value <= 0:
-         raise argparse.ArgumentTypeError("{} is invalid. Must be positive number".format(argument))
-    return value
+    arg = float(argument)
+    if arg <= 0:
+        raise argparse.ArgumentTypeError("{} is invalid. Must be positive number".format(argument))
+    return arg
 
 
 def get_arguments():
@@ -27,6 +27,7 @@ def get_arguments():
 
     args = parser.parse_args()
     return args
+
 
 def get_new_image_size(img, required_width, required_height, scale_ratio):
     image_width = img.width
@@ -43,6 +44,7 @@ def get_new_image_size(img, required_width, required_height, scale_ratio):
         required_width = int(image_width * scale_ratio)
     return required_width, required_height
 
+
 def get_img(path):
     try:
         input_img = Image.open(path)
@@ -50,6 +52,7 @@ def get_img(path):
     except FileNotFoundError:
         print('{} file not found'.format(path))
         return None
+
 
 def get_new_image_path(input_img_path, new_directory, img_width, img_height):
     if new_directory:
@@ -63,10 +66,15 @@ def get_new_image_path(input_img_path, new_directory, img_width, img_height):
 
     image_name, image_extension = os.path.splitext(input_image_full_name)
 
-    new_image_name = '{}__{}x{}{}'.format(image_name, img_width, img_height, image_extension) 
+    new_image_name = '{}__{}x{}{}'.format(
+        image_name,
+        img_width,
+        img_height,
+        image_extension)
     new_image_path = os.path.join(dir_path, new_image_name)
     return new_image_path
-   
+
+
 def check_proportions(old_img, new_img):
     old_proportion = old_img.width / old_img.height
     new_proportion = new_img.width / new_img.height
@@ -76,26 +84,25 @@ def check_proportions(old_img, new_img):
 
 
 if __name__ == '__main__':
-  arguments = get_arguments() 
-  height = arguments.height
-  input_file_path = arguments.input_file_path
-  width = arguments.width
-  output_dir = arguments.output_file_path
-  scale = arguments.scale
-  
+    arguments = get_arguments()
+    height = arguments.height
+    input_file_path = arguments.input_file_path
+    width = arguments.width
+    output_dir = arguments.output_file_path
+    scale = arguments.scale
 
-  if not height and not width and not scale:
-      exit('At least one argument must be entered')
+    if not height and not width and not scale:
+        exit('At least one argument must be entered')
 
-  image = get_img(input_file_path)
-  if not image:
-      exit('Can not open the file')
+    image = get_img(input_file_path)
+    if not image:
+        exit('Can not open the file')
 
-  new_width, new_height = get_new_image_size(image, width, height, scale)
-  new_image = image.resize((new_width, new_height))
-  proportion = check_proportions(image, new_image)
-  output_file_path = get_new_image_path(
-      input_file_path, output_dir, new_width, new_height
-  )
-  print(output_file_path)
-  new_image.save(output_file_path)
+    new_width, new_height = get_new_image_size(image, width, height, scale)
+    new_image = image.resize((new_width, new_height))
+    proportion = check_proportions(image, new_image)
+    output_file_path = get_new_image_path(
+        input_file_path, output_dir, new_width, new_height
+    )
+    print(output_file_path)
+    new_image.save(output_file_path)
