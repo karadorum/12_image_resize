@@ -27,4 +27,4 @@ The path of edited image: /home/img/image__500x400.jpg`
 Windows usage is the same.
 
 # Project Goals
-The code is written for educational purposes. Training course for web-developers - DEVMAN.org
+The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://www.devman.org)
